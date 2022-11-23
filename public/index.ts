@@ -43,7 +43,31 @@ const renderFrame = () => {
 }
 
 // Raytracing code
-const traceRay = () => {console.log("Traced a ray!")}
+const traceRay = () => {
+    const a = {x: 2.0, y: 2.0, z: 2.0}
+    const b = {x: 2.0, y: 2.0, z: 2.0}
+
+    console.log(v3Add(a, b))
+
+    console.log("Traced a ray!")
+}
+
+class ray {
+    // Fields
+    private origin: Vec3
+    private direction: Vec3
+
+    // Constructor
+    constructor(origin?: Vec3, direction?: Vec3) {
+        this.origin = origin ?? {x: 0.0, y: 0.0, z: 0.0}
+        this.direction = origin ?? {x: 0.0, y: 0.0, z: 0.0}
+    }
+
+    // Methods
+    at(t: number): Vec3 {
+        return v3Add(this.origin, v3Mul(this.direction, t))
+    }
+}
 
 // Vector 3
 interface Vec3 {
@@ -76,8 +100,42 @@ function v3Mul(a: Vec3, b: Vec3 | number) : Vec3 {
     }
 }
 
+// Vector 3 divide
+function v3Div(a: Vec3, b: Vec3) : Vec3;
+function v3Div(a: Vec3, b: number) : Vec3;
+
+function v3Div(a: Vec3, b: Vec3 | number) : Vec3 {
+    if(typeof b == 'number'){
+        return {x: a.x / b, y: a.y / b, z: a.z / b} 
+    } else {
+        return {x: a.x / b.x, y: a.y / b.y, z: a.z / b.z} 
+    }
+}
+
 // Vector 3 dot-product
 function v3Dot(a: Vec3, b: Vec3): number {
     return (a.x * b.y) + (a.y * b.y) + (a.z * b.z)
 }
 
+// Vector 3 cross-product
+function v3Cross(a: Vec3, b: Vec3): Vec3 {
+    return {
+        x: a.y * b.z - a.z * b.y,
+        y: a.z * b.x - a.x * b.z,
+        z: a.x * b.y - a.y * b.z
+    }
+}
+
+// Vector 3 length
+function v3LengthSquared(a: Vec3) : number {
+    return (a.x * a.x + a.y * a.y, + a.z * a.z)
+}
+
+function v3Length(a: Vec3) : number {
+    return Math.sqrt(v3LengthSquared(a))
+}
+
+// Vector 3 unit vector
+function v3Unit(a: Vec3): Vec3 {
+    return v3Div(a,v3Length(a))
+}
